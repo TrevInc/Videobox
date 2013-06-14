@@ -226,10 +226,10 @@ var displayvideolink;
 var open_frame;
 jQuery(document).ready(function($) {	
 	displayvideolink = function (vid, src, vwidth, vheight){
-		var frame = document.getElementById('video_'+vid);
-		var close = document.getElementById('close_'+vid);
-		var title = document.getElementById('title_'+vid);
-		var separator = document.getElementById('separator_'+vid);
+		var frame = document.getElementById('vb_video_'+vid);
+		var close = document.getElementById('vb_close_'+vid);
+		var title = document.getElementById('vb_title_'+vid);
+		var separator = document.getElementById('vb_separator_'+vid);
 		var span = frame.parentNode.parentNode.parentNode.parentNode;
 		if((frame.getAttribute('style').indexOf('block')==-1)){
 			if(open_frame!=null){
@@ -273,10 +273,10 @@ jQuery(document).ready(function($) {
 	}
 	
 	displayvideo = function (vid, src, vwidth, vheight, twidth, theight){
-		var frame = document.getElementById('video_'+vid);
-		var image = document.getElementById('thumb_'+vid);
-		var close = document.getElementById('close_'+vid);
-		var title = document.getElementById('title_'+vid);
+		var frame = document.getElementById('vb_video_'+vid);
+		var image = document.getElementById('vb_thumb_'+vid);
+		var close = document.getElementById('vb_close_'+vid);
+		var title = document.getElementById('vb_title_'+vid);
 		if((frame.getAttribute('style').indexOf('block')==-1)){
 			image.style.display = 'none';
 			frame.style.display = 'block';
@@ -310,9 +310,9 @@ jQuery(document).ready(function($) {
 
 // AUTOLOAD CODE BLOCK (MAY BE CHANGED OR REMOVED)
 jQuery(function vb($) {
-$("a[rel^='videobox']").videobox({ /* Put custom options here */ }, function vbl(el) {
+	$("a[rel^='videobox']").videobox({ /* Put custom options here */ }, function vbl(el) {
 		return [el.href, el.getAttribute("title"), el.getAttribute("videowidth"), el.getAttribute("videoheight")];
-}, function vbl(el) {
-  return (this == el) || ((this.rel.length > 8) && (this.rel == el.rel));
- });
+	}, function vbl(el) {
+		return (this == el) || ((this.rel.length > 8) && (this.rel == el.rel));
+	});
 });

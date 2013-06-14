@@ -469,7 +469,7 @@ class plgSystemVideobox extends JPlugin
 									if(($n>$start)&($n<=($start+$parametri['pages']))){
 										if($i==($parametri['break']+1)){
 											$i = 1;
-											$thumbnails .= '</ul><ul class="video">';
+											$thumbnails .= '</ul><ul class="vb_video">';
 										}
 										$thumbnails .= ' ' . $this->_videoThumb($video, $parametri, $co, $parametri['t_width'], $parametri['t_height'], $parametri['width'], $parametri['height'], $n) . ' ';
 										$i++;
@@ -490,7 +490,7 @@ class plgSystemVideobox extends JPlugin
 					if(($parametri['links']==1)||($count==1)){
 						$buffer = preg_replace($regex, $thumbnails, $buffer, 1);
 					} else {
-						$buffer = preg_replace($regex, '<div style="display: table; '.$parametri['style'].'" class="'.$parametri['class'].'"><ul class="video">' . $thumbnails . '</ul></div>'.$pagination, $buffer, 1);
+						$buffer = preg_replace($regex, '<div style="display: table; '.$parametri['style'].'" class="'.$parametri['class'].'"><ul class="vb_video">' . $thumbnails . '</ul></div>'.$pagination, $buffer, 1);
 					}
 				}
 			}
@@ -531,7 +531,7 @@ class plgSystemVideobox extends JPlugin
 				}
 			}
 		}
-		$html  = '<div style="width: '.$v_width.'px; '.$params['style'].'" class="videoFrame '.$params['class'].'"><iframe width="'.$v_width.'" height="'.$v_height.'" src="'.$src.'" frameborder="0" allowfullscreen oallowfullscreen msallowfullscreen webkitallowfullscreen mozallowfullscreen style="display: block; background: #000;"></iframe></div>';
+		$html  = '<div style="width: '.$v_width.'px; '.$params['style'].'" class="vb_videoFrame '.$params['class'].'"><iframe width="'.$v_width.'" height="'.$v_height.'" src="'.$src.'" frameborder="0" allowfullscreen oallowfullscreen msallowfullscreen webkitallowfullscreen mozallowfullscreen style="display: block; background: #000;"></iframe></div>';
 		return $html;
 	}
 	
@@ -550,9 +550,9 @@ class plgSystemVideobox extends JPlugin
 			}
 		}
 		if($params['lightbox']=='0'){
-			$html = '<span class="'.$params['class'].'" style="'.$params['style'].'"><a class="video_close" onclick="displayvideolink(\''.$i.'_'.$n.'\',\''.$src.'\',\''.$v_width.'\',\''.$v_height.'\')" id="close_'.$i.'_'.$n.'" style="cursor: pointer;"></a><a class="video_link_a" onclick="displayvideolink(\''.$i.'_'.$n.'\',\''.$src.'\',\''.$v_width.'\',\''.$v_height.'\')" style="cursor: pointer;" ><span class="video_link" style="display: none;"><span><iframe allowfullscreen oallowfullscreen msallowfullscreen webkitallowfullscreen mozallowfullscreen id="video_'.$i.'_'.$n.'" style="display: none;"></iframe></span></span><span id="title_'.$i.'_'.$n.'" style="" >' . $video[1] . '</span></a><span id="separator_'.$i.'_'.$n.'">'.$separator.'</span></span>';
+			$html = '<span class="'.$params['class'].'" style="'.$params['style'].'"><a class="vb_video_close" onclick="displayvideolink(\''.$i.'_'.$n.'\',\''.$src.'\',\''.$v_width.'\',\''.$v_height.'\')" id="vb_close_'.$i.'_'.$n.'" style="cursor: pointer;"></a><a class="vb_video_link_a" onclick="displayvideolink(\''.$i.'_'.$n.'\',\''.$src.'\',\''.$v_width.'\',\''.$v_height.'\')" style="cursor: pointer;" ><span class="vb_video_link" style="display: none;"><span><iframe allowfullscreen oallowfullscreen msallowfullscreen webkitallowfullscreen mozallowfullscreen id="vb_video_'.$i.'_'.$n.'" style="display: none;"></iframe></span></span><span id="vb_title_'.$i.'_'.$n.'" style="" >' . $video[1] . '</span></a><span id="vb_separator_'.$i.'_'.$n.'">'.$separator.'</span></span>';
 		} else {
-			$html = '<a class="'.$params['class'].' video_link_a" style="'.$params['style'].'" href="'.$src.'" rel="videobox.sig'.$i.'" title="'.$video[1].'" videowidth="'.$v_width.'" videoheight="'.$v_height.'">'.$video[1].'</a>'.$separator;
+			$html = '<a class="'.$params['class'].' vb_video_link_a" style="'.$params['style'].'" href="'.$src.'" rel="videobox.sig'.$i.'" title="'.$video[1].'" videowidth="'.$v_width.'" videoheight="'.$v_height.'">'.$video[1].'</a>'.$separator;
 		}
 		return $html;
 	}
@@ -573,25 +573,25 @@ class plgSystemVideobox extends JPlugin
 		if($params['button']=='1') $play = '&play=1';
 		$img = $video[9].'/plugins/system/videobox/showthumb.php?img='.rawurlencode($video[0].$video[7]).'&width='.$t_width.'&height='.$t_height.$play;
 		if($params['lightbox']=='0'){
-			$thumb  = '<li class="video_cont_0">
-				<a class="video_close" onclick="displayvideo(\''.$i.'_'.$n.'\',\''.$src.'\',\''.$t_width.'\',\''.$t_height.'\',\''.$t_width.'\',\''.$t_height.'\')" id="close_'.$i.'_'.$n.'"></a>
+			$thumb  = '<li class="vb_video_cont_0">
+				<a class="vb_video_close" onclick="displayvideo(\''.$i.'_'.$n.'\',\''.$src.'\',\''.$t_width.'\',\''.$t_height.'\',\''.$t_width.'\',\''.$t_height.'\')" id="vb_close_'.$i.'_'.$n.'"></a>
 				<a onclick="displayvideo(\''.$i.'_'.$n.'\',\''.$src.'\',\''.$t_width.'\',\''.$t_height.'\',\''.$t_width.'\',\''.$t_height.'\')" >
-					<span class="video_thumb">
+					<span class="vb_video_thumb">
 						<span style="display: none;">
-							<iframe allowfullscreen oallowfullscreen msallowfullscreen webkitallowfullscreen mozallowfullscreen id="video_'.$i.'_'.$n.'" style="width: '.$t_width.'px; height: '.$t_height.'px; display: none;"></iframe>
+							<iframe allowfullscreen oallowfullscreen msallowfullscreen webkitallowfullscreen mozallowfullscreen id="vb_video_'.$i.'_'.$n.'" style="width: '.$t_width.'px; height: '.$t_height.'px; display: none;"></iframe>
 						</span>
-						<img src="'.$img.'" id="thumb_'.$i.'_'.$n.'" alt="'.$video[1].'" />
+						<img src="'.$img.'" id="vb_thumb_'.$i.'_'.$n.'" alt="'.$video[1].'" />
 					</span>
-					<span class="video_title" id="title_'.$i.'_'.$n.'" style="width: '.$t_width.'px;" >' . $video[1] . '</span>
+					<span class="vb_video_title" id="vb_title_'.$i.'_'.$n.'" style="width: '.$t_width.'px;" >' . $video[1] . '</span>
 				</a>
 			</li>';
 		} else {
-			$thumb  = '<li class="video_cont_0">
+			$thumb  = '<li class="vb_video_cont_0">
 				<a href="'.$src.'" rel="videobox.sig'.$i.'" title="' . $video[1] . '" videowidth="'.$v_width.'" videoheight="'.$v_height.'">
-					<span class="video_thumb">
-						<img src="'.$img.'" id="thumb_'.$i.'_'.$n.'" alt="'.$video[1].'" />
+					<span class="vb_video_thumb">
+						<img src="'.$img.'" id="vb_thumb_'.$i.'_'.$n.'" alt="'.$video[1].'" />
 					</span>
-					<span class="video_title" style="width: '.$t_width.'px;" >' . $video[1] . '</span>
+					<span class="vb_video_title" style="width: '.$t_width.'px;" >' . $video[1] . '</span>
 				</a>
 			</li>';
 		}
@@ -614,25 +614,25 @@ class plgSystemVideobox extends JPlugin
 		if($params['button']=='1') $play = '&play=1';
 		$img = $video[9].'/plugins/system/videobox/showthumb.php?img='.rawurlencode($video[0].$video[7]).'&width='.$t_width.'&height='.$t_height.$play;
 		if($params['lightbox']=='0'){
-			$thumb  = '<span class="video_box_0 '.$params['class'].'" style="'.$params['style'].'">
-				<a class="video_close" onclick="displayvideo(\''.$i.'_'.$n.'\',\''.$src.'\',\''.$v_width.'\',\''.$v_height.'\',\''.$t_width.'\',\''.$t_height.'\')" id="close_'.$i.'_'.$n.'"></a>
+			$thumb  = '<span class="vb_video_box_0 '.$params['class'].'" style="'.$params['style'].'">
+				<a class="vb_video_close" onclick="displayvideo(\''.$i.'_'.$n.'\',\''.$src.'\',\''.$v_width.'\',\''.$v_height.'\',\''.$t_width.'\',\''.$t_height.'\')" id="vb_close_'.$i.'_'.$n.'"></a>
 				<a onclick="displayvideo(\''.$i.'_'.$n.'\',\''.$src.'\',\''.$v_width.'\',\''.$v_height.'\',\''.$t_width.'\',\''.$t_height.'\')" >
-					<span class="video_thumb">
+					<span class="vb_video_thumb">
 						<span style="display: none;">
-							<iframe allowfullscreen oallowfullscreen msallowfullscreen webkitallowfullscreen mozallowfullscreen id="video_'.$i.'_'.$n.'" style="width: '.$t_width.'px; height: '.$t_height.'px; display: none;"></iframe>
+							<iframe allowfullscreen oallowfullscreen msallowfullscreen webkitallowfullscreen mozallowfullscreen id="vb_video_'.$i.'_'.$n.'" style="width: '.$t_width.'px; height: '.$t_height.'px; display: none;"></iframe>
 						</span>
-						<img src="'.$img.'" id="thumb_'.$i.'_'.$n.'" alt="'.$video[1].'" />
+						<img src="'.$img.'" id="vb_thumb_'.$i.'_'.$n.'" alt="'.$video[1].'" />
 					</span>
-					<span class="video_title" id="title_'.$i.'_'.$n.'" style="width: '.$t_width.'px;">'.$video[1].'</span>
+					<span class="vb_video_title" id="vb_title_'.$i.'_'.$n.'" style="width: '.$t_width.'px;">'.$video[1].'</span>
 				</a>
 			</span>';
 		} else {
-			$thumb  = '<span class="video_box_0 '.$params['class'].'" style="'.$params['style'].'">
+			$thumb  = '<span class="vb_video_box_0 '.$params['class'].'" style="'.$params['style'].'">
 				<a href="'.$src.'" rel="videobox.sib'.$i.'" title="'.$video[1].'" videowidth="'.$v_width.'" videoheight="'.$v_height.'">
-					<span class="video_thumb">
-						<img src="'.$img.'" id="thumb_'.$i.'_'.$n.'" alt="'.$video[1].'" />
+					<span class="vb_video_thumb">
+						<img src="'.$img.'" id="vb_thumb_'.$i.'_'.$n.'" alt="'.$video[1].'" />
 					</span>
-					<span class="video_title" style="width: '.$t_width.'px;">'.$video[1].'</span>
+					<span class="vb_video_title" style="width: '.$t_width.'px;">'.$video[1].'</span>
 				</a>
 			</span>';
 		}
