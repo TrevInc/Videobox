@@ -34,12 +34,20 @@ if(strpos('mp4,ogv,webm,m4v,oga,mp3,m4a,webma,wav', $imgdata['extension'])!==fal
 	$domain = $protocol.$_SERVER['HTTP_HOST'].'/';
 	$imgthumb = str_replace($domain, $rootdir, $imgthumb);
 	$imgthumb = str_replace('//', '/', $imgthumb);
+	if(strpos($imgthumb, 'http:/')===0){
+		$imgthumb = str_replace("http:/", "http://", $imgthumb);	
+	}
+	
+	if(strpos($imgthumb, 'https:/')===0){
+		$imgthumb = str_replace("https:/", "https://", $imgthumb);	
+	}
 
 	if(strpos($imgthumb, 'http')===0){
 		$imgthumb = str_replace(" ", "%20", $imgthumb);	
 	} elseif(strpos($imgthumb, $rootdir)===false) {
 		$imgthumb = $rootdir.$imgthumb;
 	}
+	
 	if(@getimagesize($imgthumb.'.png')){
 		$img = $imgthumb.'.png'; //thumbnail is provided, filetype .png
 	} elseif(@getimagesize($imgthumb.'.jpg')){
@@ -136,46 +144,66 @@ $b_btm = 0;
 $b_lft = 0;
 $b_rt = 0;
 
-if(($imagedata[0]!==false)&&($imagedata[1]!==false)&&($imagedata[0]<=1920)&&($imagedata[1]<=1080)){
+if(($imagedata[0]!==false)&&($imagedata[1]!==false)){
 
-	for($y = 0; $y < $imagedata[1]; $y++) {
-		for($x = 0; $x < $imagedata[0]; $x++) {
-			if(imagecolorat($src_img, $x, $y) > 0x000000) {
-				break 2;
-			}
-		}
-		$b_top++;
-	}
-
-	for($y = $imagedata[1]-1; $y >= 0; $y--) {
-		for($x = 0; $x < $imagedata[0]; $x++) {
-			if(imagecolorat($src_img, $x, $y) > 0x000000) {
-				break 2;
-			}
-		}
-		$b_btm++;
-	}
-
-	for($x = 0; $x < $imagedata[0]; $x++) {
+	if(($imagedata[0]<=1920)&&($imagedata[1]<=1080)){
+	
 		for($y = 0; $y < $imagedata[1]; $y++) {
-			if(imagecolorat($src_img, $x, $y) > 0x000000) {
-				break 2;
+			for($x = 0; $x < $imagedata[0]; $x++) {
+				$rgb = imagecolorat($src_img, $x, $y);
+				$r = ($rgb >> 16) & 0xFF;
+				$g = ($rgb >> 8) & 0xFF;
+				$b = $rgb & 0xFF;
+				if(($r > 31)||($g > 31)||($b > 31)) {
+					break 2;
+				}
 			}
+			$b_top++;
 		}
-		$b_lft++;
-	}
 
-	for($x = $imagedata[0]-1; $x >= 0; $x--) {
-		for($y = 0; $y < $imagedata[1]; $y++) {
-			if(imagecolorat($src_img, $x, $y) > 0x000000) {
-				break 2;
+		for($y = $imagedata[1]-1; $y >= 0; $y--) {
+			for($x = 0; $x < $imagedata[0]; $x++) {
+				$rgb = imagecolorat($src_img, $x, $y);
+				$r = ($rgb >> 16) & 0xFF;
+				$g = ($rgb >> 8) & 0xFF;
+				$b = $rgb & 0xFF;
+				if(($r > 31)||($g > 31)||($b > 31)) {
+					break 2;
+				}
 			}
+			$b_btm++;
 		}
-		$b_rt++;
+
+		for($x = 0; $x < $imagedata[0]; $x++) {
+			for($y = 0; $y < $imagedata[1]; $y++) {
+				$rgb = imagecolorat($src_img, $x, $y);
+				$r = ($rgb >> 16) & 0xFF;
+				$g = ($rgb >> 8) & 0xFF;
+				$b = $rgb & 0xFF;
+				if(($r > 31)||($g > 31)||($b > 31)) {
+					break 2;
+				}
+			}
+			$b_lft++;
+		}
+
+		for($x = $imagedata[0]-1; $x >= 0; $x--) {
+			for($y = 0; $y < $imagedata[1]; $y++) {
+				$rgb = imagecolorat($src_img, $x, $y);
+				$r = ($rgb >> 16) & 0xFF;
+				$g = ($rgb >> 8) & 0xFF;
+				$b = $rgb & 0xFF;
+				if(($r > 31)||($g > 31)||($b > 31)) {
+					break 2;
+				}
+			}
+			$b_rt++;
+		}
+	
 	}
 
 } else {
-	exit("Image contains errors or is too big to be processed");
+	exit("There was an error opening the image");
 }
 
 $newimg = imagecreatetruecolor(imagesx($src_img)-($b_lft+$b_rt), imagesy($src_img)-($b_top+$b_btm));
@@ -199,7 +227,7 @@ if((($width*$imagedata[1])/$height)>=$imagedata[0]){
 	$offset_h = (int)(($height - $new_h)/2);
 }
 $dst_img = imagecreatetruecolor($width, $height);
-imagealphablending($dst_img, true);
+imagealphablending($dst_img, false);
 imagesavealpha($dst_img, true);
 $black = imagecolorallocatealpha($dst_img, 0, 0, 0, 0);
 imagefilledrectangle($dst_img, 0, 0, $width, $height, $black);
@@ -208,10 +236,11 @@ imagefilledrectangle($dst_img, 0, 0, $width, $height, $black);
 imagecopyresampled($dst_img, $newimg, $offset_w, $offset_h, 0, 0, $new_w, $new_h, $imagedata[0], $imagedata[1]);
 
 if(($play!=0)&($width>=160)&($height>=120)){
+	imagealphablending($dst_img, true);
 	imagecopyresampled($dst_img, $play, ($width-100)/2, ($height-80)/2, 0, 0, 100, 80, 100, 80);
 }
 
-header("Content-type: image/jpg");
-imagejpeg($dst_img, null, 100);
+header("Content-type: image/png");
+imagepng($dst_img);
 
 ?>

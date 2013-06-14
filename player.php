@@ -20,6 +20,8 @@ $start = 0;
 if(isset($_GET['start'])) $start = $_GET['start'];
 $autoplay = 0;
 if(isset($_GET['autoplay'])) $autoplay = $_GET['autoplay'];
+$close = 0;
+if(isset($_GET['close'])) $close = $_GET['close'];
 
 if(($SERVER_['HTTPS']!='off')&&($SERVER_['HTTPS']!=null)){
 	$protocol = 'https://';
@@ -57,30 +59,59 @@ if(strpos($videotypes, $videoinfo['extension'])===false){
 }
 $auto = '';
 if($autoplay=='1'){
-	$auto = ' autoplay="autoplay"';
+	$auto = 'video.play();
+	if(video.paused==false){
+		$(button).hide();
+	}';
+}
+$ended = '';
+$button = '';
+$pp = '';
+$controls = 'controls="controls"';
+if($close=='1'){
+	$ended = 'setTimeout(function(){window.parent.jQuery.vb_close();},500);';
+	$play_css = '.play {background: url(\''.$http_root.'/plugins/system/videobox/css/play.png\'); position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-repeat: no-repeat; background-position: center;}';
+	$controls = '';
+	$button = ' class="play"';
+	$pp = 'video.addEventListener(\'click\',playPause,false);';
 }
 
 $poster = $http_root.'/plugins/system/videobox/showthumb.php?img='.$source.'.'.$videoinfo['extension'].'&amp;width=640&amp;height=363';
 
-$output = '<html>
+$output = '<!doctype html>
+<html>
 	<head>
 		<style type="text/css">
-			html, body {margin: 0; padding: 0; background: #000;}
+			html, body {margin: 0; padding: 0; background: #000; color: #fff; width: 100%; height: 100%;}
+			'.$play_css.'
 		</style>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-		<script type="text/javascript">jQuery.noConflict();</script>
 		<script src="http://api.html5media.info/1.1.5/html5media.min.js"></script>
 	</head>
 	<body>
-		<video controls="controls"'.$auto.' poster="'.$poster.'" id="vb_HTML5_video" style="display: block; background: #000; width: 100%; height: 100%">
+		<div id="button"'.$button.'></div>
+		<video '.$controls.' poster="'.$poster.'" onEnded="'.$ended.'" id="vb_HTML5_video" style="display: block; background: #000; width: 100%; height: 100%">
 			'.$sources.'
 		</video>
 		<script type="text/javascript">
 			try {
-				document.getElementById(\'vb_HTML5_video\').addEventListener(\'loadedmetadata\', function load(event){
-					document.getElementById(\'vb_HTML5_video\').currentTime = '.(int)$start.';
-					
+				var video = document.getElementById(\'vb_HTML5_video\');
+				var button = document.getElementById(\'button\');
+				video.addEventListener(\'loadedmetadata\', function load(event){
+					video.currentTime = '.(int)$start.';
+					'.$auto.'
 				}, false);
+				'.$pp.'
+				button.addEventListener(\'click\',playPause,false);
+				function playPause(){
+					if(video.paused==true){
+						video.play();
+						$(button).hide();
+					} else {
+						video.pause();
+						$(button).show();
+					}
+				}
 			} catch(err) {
 			
 			}
