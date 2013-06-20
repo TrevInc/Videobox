@@ -3,11 +3,11 @@
     <name>PLG_SYSTEM_VIDEOBOX</name>
 	<license>http://www.gnu.org/licenseses/gpl-2.0.html GNU/GPL</license>
     <author>Hitko and Anthony Bellew</author>
-    <creationDate>August 2012</creationDate>
+    <creationDate>June 2013</creationDate>
     <copyright>This extension in released under the GNU/GPL License - http://www.gnu.org/copyleft/gpl.html</copyright>
     <authorEmail>development@hitko.si</authorEmail>
     <authorUrl>http://hitko.si/</authorUrl>
-    <version>3.1.1-opn</version>
+    <version>3.1.2-opn</version>
     <description>PLG_SYSTEM_VIDEOBOX_XML_DESCRIPTION</description>
     <files>
 		<filename plugin="videobox">videobox.php</filename>
@@ -15,6 +15,7 @@
 		<filename plugin="videobox">videobox.js</filename>
 		<filename plugin="videobox">index.html</filename>
 		<filename plugin="videobox">player.php</filename>
+		<filename plugin="videobox">html5media.min.js</filename>
 		<folder plugin="videobox">css</folder>
 		<folder plugin="videobox">thumbs</folder>
     </files>
